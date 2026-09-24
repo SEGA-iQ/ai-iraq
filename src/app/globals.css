@@ -1,0 +1,78 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-arabic), "Segoe UI", Tahoma, system-ui, sans-serif;
+
+  --color-bg: #f5f6f8;
+  --color-surface: #ffffff;
+  --color-surface-2: #f0f2f5;
+  --color-border: #e1e4e9;
+  --color-border-strong: #c9ced6;
+  --color-text: #141920;
+  --color-muted: #5b6471;
+  --color-faint: #8a929e;
+
+  --color-accent: #0e7468;
+  --color-accent-hover: #0b5f55;
+  --color-accent-soft: #e3f3f0;
+  --color-accent-fg: #ffffff;
+
+  --color-stop: #b42318;
+  --color-stop-soft: #fdecea;
+  --color-watch: #9a5b05;
+  --color-watch-soft: #fdf2df;
+  --color-keep: #1d4fb8;
+  --color-keep-soft: #e8effc;
+  --color-scale: #067647;
+  --color-scale-soft: #e5f5eb;
+  --color-neutral-soft: #eceff3;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #0f1216;
+    --color-surface: #171b21;
+    --color-surface-2: #1e232a;
+    --color-border: #2a3039;
+    --color-border-strong: #3a424d;
+    --color-text: #e8ebef;
+    --color-muted: #a2abb7;
+    --color-faint: #7b8490;
+
+    --color-accent: #3cc3b1;
+    --color-accent-hover: #5ad3c2;
+    --color-accent-soft: #123a35;
+    --color-accent-fg: #06201c;
+
+    --color-stop: #f97066;
+    --color-stop-soft: #3a1714;
+    --color-watch: #f5b54a;
+    --color-watch-soft: #36270d;
+    --color-keep: #7ea6f6;
+    --color-keep-soft: #16233d;
+    --color-scale: #4fd48a;
+    --color-scale-soft: #0f2c1c;
+    --color-neutral-soft: #242a32;
+  }
+}
+
+html {
+  color-scheme: light dark;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Numbers, phone numbers and codes read left-to-right inside RTL text. */
+.ltr-nums {
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
