@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="ad-size" content="1080x1920">
+<title>التوصيل السريع — حمّل التطبيق</title>
+<link rel="stylesheet" href="fonts/fonts.css">
+<style>
+  :root{
+    --brand:#F04E23;      /* block red-orange: field, stamp stripe, CTA bar — nothing else */
+    --brand-ink:#111111;  /* ink black */
+    --accent:#F04E23;     /* single accent = brand */
+    --bg:#F3EDE0;         /* paper cream */
+    --fg:#111111;
+    --m:70px;             /* outer margin (story) */
+    --split:1272px;       /* red field ends / band begins */
+    --col:336px;          /* paper column width */
+  }
+  html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:var(--bg);color:var(--fg);
+    font-family:'Changa','Cairo',sans-serif;-webkit-font-smoothing:antialiased;}
+  *{box-sizing:border-box;letter-spacing:0}
+  .ltr{direction:ltr;unicode-bidi:isolate}
+
+  /* ---- blocks ---- */
+  .red{position:absolute;inset:0 0 auto 0;height:var(--split);background:var(--brand);}
+  .ink{position:absolute;left:var(--col);right:0;top:var(--split);bottom:0;background:var(--brand-ink);}
+  .paper{position:absolute;left:0;width:var(--col);top:var(--split);bottom:0;background:var(--bg);}
+
+  /* skyline: lives in the bottom overlay zone, behind nothing that matters */
+  .sky{position:absolute;left:var(--col);right:0;bottom:0;height:240px}
+  .sky svg{width:100%;height:100%;display:block}
+
+  /* ---- wordmark: perforated stamp + name (below the 250px overlay zone) ---- */
+  .brand{position:absolute;top:276px;right:var(--m);display:flex;align-items:center;gap:20px;color:var(--fg);}
+  .brand svg{width:72px;height:72px;display:block}
+  .brand .name{font:800 56px/1.15 'Changa';white-space:nowrap}
+  .tag{position:absolute;top:358px;right:var(--m);font:700 36px/1.3 'Cairo';color:var(--fg);white-space:nowrap}
+
+  /* ---- headline: four linear lines, the hook line larger ---- */
+  .hl{position:absolute;right:var(--m);top:430px;text-align:right;color:var(--fg)}
+  .hl div{font:800 146px/1.2 'Changa';white-space:nowrap}
+  .hl .big{font-size:166px}
+
+  /* ---- support: two cream stickers in one row ---- */
+  .sup{position:absolute;right:var(--m);top:1182px;display:flex;gap:14px}
+  .sup .chip{display:inline-flex;align-items:center;gap:14px;height:54px;padding:0 20px 0 22px;background:var(--bg);color:var(--fg);
+    font:700 38px/1 'Cairo';white-space:nowrap}
+  .sup .chip i{width:14px;height:14px;background:var(--fg);display:block;flex:none;transform:rotate(45deg)}
+
+  /* ---- band rows (right-aligned, stacked; all text ends above the 340px bottom zone) ---- */
+  .cta{position:absolute;right:var(--m);top:1322px;display:inline-flex;align-items:center;gap:22px;
+    background:var(--accent);color:var(--fg);height:84px;padding:0 30px 0 32px;font:800 54px/1 'Changa';white-space:nowrap}
+  .cta svg{width:46px;height:46px;display:block}
+
+  .stores{position:absolute;right:var(--m);top:1420px;display:flex;gap:14px;direction:ltr}
+  .badge{display:inline-flex;align-items:center;gap:12px;height:58px;padding:0 22px 0 18px;background:var(--bg);color:var(--fg);
+    font:700 40px/1 'Changa';white-space:nowrap;direction:ltr;unicode-bidi:isolate}
+  .badge svg{width:32px;height:32px;display:block}
+
+  .wa{position:absolute;right:var(--m);top:1494px;display:flex;align-items:center;gap:18px;color:var(--bg)}
+  .wa .num{font:800 76px/1 'Changa';white-space:nowrap}
+  .wa svg{width:60px;height:60px;display:block}
+
+  /* ---- phone illustration: stands in the paper column ---- */
+  .phone{position:absolute;left:70px;top:1322px;width:230px;height:480px}
+  .phone svg{width:100%;height:100%;display:block}
+</style>
+</head>
+<body>
+  <div class="red"></div>
+  <div class="ink"></div>
+  <div class="paper"></div>
+
+  <!-- Baghdad skyline, low opacity -->
+  <div class="sky" aria-hidden="true">
+    <svg viewBox="340 0 740 150" preserveAspectRatio="none">
+      <defs>
+        <g id="skyline">
+          <path d="M340 150V104H380V150ZM392 150V86H436V150ZM448 150V112H490V150Z"/>
+          <path d="M506 150V118l5-2V84l-5-4V72h12v8l-5 4v32l5 2v32Z"/>
+          <path d="M530 150V112c0-34 52-34 52 0v38Z"/>
+          <path d="M526 150V60l5-12 5 12v90ZM582 150V60l5-12 5 12v90Z"/>
+          <path d="M608 150V98H652V150ZM664 150V120H700V150Z"/>
+          <path d="M724 150V96h5v54Z"/>
+          <path d="M726 98c-22-6-38-18-42-34 16 2 32 12 42 26 10-14 26-24 42-26-4 16-20 28-42 34Z"/>
+          <path d="M726 100c-12-12-16-30-12-46 8 10 14 26 12 46-2-20 4-36 12-46 4 16 0 34-12 46Z"/>
+          <path d="M766 150V110h5v40Z"/>
+          <path d="M768 112c-18-5-30-14-34-28 13 2 26 10 34 22 8-12 21-20 34-22-4 14-16 23-34 28Z"/>
+          <path d="M800 150V90H846V150ZM858 150V70H910V150ZM922 150V104H964V150ZM976 150V82H1024V150ZM1036 150V112H1080V150Z"/>
+          <path d="M806 150V124c0-22-26-28-34-10-6 14-10 24-10 36Z"/>
+        </g>
+      </defs>
+      <g fill="var(--bg)" stroke="var(--bg)" opacity=".12"><use href="#skyline"/></g>
+    </svg>
+  </div>
+
+  <!-- wordmark: ink stamp, brand stripe cut, RTL forward arrow -->
+  <div class="brand">
+    <svg viewBox="0 0 64 64" aria-hidden="true">
+      <defs>
+        <mask id="perf">
+          <rect width="64" height="64" fill="#fff"/>
+          <g fill="#000">
+            <circle cx="0" cy="8" r="4"/><circle cx="0" cy="20" r="4"/><circle cx="0" cy="32" r="4"/><circle cx="0" cy="44" r="4"/><circle cx="0" cy="56" r="4"/>
+            <circle cx="64" cy="8" r="4"/><circle cx="64" cy="20" r="4"/><circle cx="64" cy="32" r="4"/><circle cx="64" cy="44" r="4"/><circle cx="64" cy="56" r="4"/>
+            <circle cx="8" cy="0" r="4"/><circle cx="20" cy="0" r="4"/><circle cx="32" cy="0" r="4"/><circle cx="44" cy="0" r="4"/><circle cx="56" cy="0" r="4"/>
+            <circle cx="8" cy="64" r="4"/><circle cx="20" cy="64" r="4"/><circle cx="32" cy="64" r="4"/><circle cx="44" cy="64" r="4"/><circle cx="56" cy="64" r="4"/>
+            <rect x="0" y="43" width="64" height="9"/>
+          </g>
+        </mask>
+      </defs>
+      <rect width="64" height="64" fill="var(--brand-ink)" mask="url(#perf)"/>
+      <path d="M47 26H21" stroke="var(--bg)" stroke-width="6" stroke-linecap="round"/>
+      <path d="M30 16L20 26l10 10" stroke="var(--bg)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    </svg>
+    <div class="name">التوصيل السريع</div>
+  </div>
+  <div class="tag">دليفري داخل بغداد وللمحافظات</div>
+
+  <!-- headline -->
+  <div class="hl">
+    <div>اطلب</div>
+    <div>من التطبيق</div>
+    <div>وتابع المندوب</div>
+    <div class="big">لحظة بلحظة</div>
+  </div>
+
+  <!-- support stickers -->
+  <div class="sup">
+    <div class="chip"><i></i><span>تسعيرة واضحة قبل ما تطلب</span></div>
+    <div class="chip"><i></i><span>الدفع عند الاستلام</span></div>
+  </div>
+
+  <!-- CTA bar -->
+  <div class="cta">
+    <span>حمّل التطبيق</span>
+    <svg viewBox="0 0 40 40" aria-hidden="true" fill="var(--fg)">
+      <polygon points="20,30 6,16 14,16 14,0 26,0 26,16 34,16"/>
+      <rect x="4" y="34" width="32" height="6"/>
+    </svg>
+  </div>
+
+  <!-- store badges (LTR) -->
+  <div class="stores">
+    <div class="badge">
+      <svg viewBox="0 0 30 30" aria-hidden="true" fill="var(--fg)">
+        <path d="M21.6 15.9c0-3 2.5-4.5 2.6-4.6-1.4-2.1-3.6-2.4-4.4-2.4-1.9-.2-3.7 1.1-4.6 1.1-1 0-2.4-1.1-4-1-2 0-3.9 1.2-5 3-2.1 3.7-.5 9.2 1.5 12.2 1 1.5 2.2 3.1 3.8 3 1.5-.1 2.1-1 3.9-1s2.4 1 4 .9c1.7 0 2.7-1.5 3.7-3 1.2-1.7 1.6-3.3 1.7-3.4-.1 0-3.2-1.2-3.2-4.8zM18.6 6.9c.8-1 1.4-2.4 1.2-3.9-1.2.1-2.7.8-3.5 1.8-.8.9-1.5 2.3-1.3 3.7 1.4.1 2.8-.7 3.6-1.6z"/>
+      </svg>
+      <span>App Store</span>
+    </div>
+    <div class="badge">
+      <svg viewBox="0 0 30 30" aria-hidden="true" fill="var(--fg)">
+        <path d="M5 3.2v23.6c0 .7.8 1.2 1.4.8l20.4-11.8c.6-.4.6-1.2 0-1.6L6.4 2.4C5.8 2 5 2.5 5 3.2z"/>
+      </svg>
+      <span>Google Play</span>
+    </div>
+  </div>
+
+  <!-- WhatsApp line -->
+  <div class="wa">
+    <div class="num ltr">0770 000 0000</div>
+    <svg viewBox="0 0 48 48" aria-hidden="true">
+      <path d="M24 4C13 4 4 12.8 4 23.7c0 3.7 1 7.2 2.9 10.2L4 44l10.4-2.7c2.9 1.6 6.2 2.4 9.6 2.4 11 0 20-8.8 20-19.7S35 4 24 4z" fill="var(--bg)"/>
+      <path d="M17.4 14.6c-.5-1-1-1-1.4-1h-1.2c-.4 0-1.1.2-1.6.8-.6.6-2.1 2-2.1 5s2.2 5.8 2.5 6.2c.3.4 4.2 6.7 10.4 9.1 5.2 2 6.2 1.6 7.3 1.5 1.1-.1 3.6-1.5 4.1-2.9.5-1.4.5-2.6.4-2.9-.2-.3-.6-.4-1.2-.7-.6-.3-3.6-1.8-4.2-2-.6-.2-1-.3-1.4.3-.4.6-1.6 2-2 2.4-.4.4-.7.5-1.3.2-.6-.3-2.6-1-4.9-3-1.8-1.6-3-3.6-3.4-4.2-.4-.6 0-.9.3-1.2.3-.3.6-.7.9-1.1.3-.4.4-.6.6-1 .2-.4.1-.8 0-1.1-.2-.3-1.3-3.3-1.8-4.4z" fill="var(--brand-ink)"/>
+    </svg>
+  </div>
+
+  <!-- phone with live courier tracking -->
+  <div class="phone" aria-hidden="true">
+    <svg viewBox="0 0 220 460">
+      <defs>
+        <clipPath id="scr"><rect x="12" y="14" width="196" height="432" rx="26"/></clipPath>
+      </defs>
+      <rect x="0" y="0" width="220" height="460" rx="36" fill="var(--brand-ink)"/>
+      <rect x="12" y="14" width="196" height="432" rx="26" fill="var(--bg)"/>
+      <g clip-path="url(#scr)">
+        <g stroke="var(--brand-ink)" stroke-opacity=".08" stroke-width="2">
+          <path d="M12 94H208M12 174H208M12 254H208M12 334H208M12 414H208M52 14V446M92 14V446M132 14V446M172 14V446"/>
+        </g>
+        <g fill="var(--brand-ink)" fill-opacity=".06">
+          <rect x="20" y="102" width="26" height="30" rx="3"/><rect x="100" y="102" width="26" height="64" rx="3"/>
+          <rect x="180" y="182" width="24" height="64" rx="3"/><rect x="60" y="342" width="26" height="30" rx="3"/>
+          <rect x="140" y="342" width="26" height="64" rx="3"/><rect x="180" y="20" width="24" height="26" rx="3"/>
+        </g>
+        <path d="M-10 60C40 70 40 150 20 200S60 300 120 330 230 400 240 460" stroke="var(--brand-ink)" stroke-opacity=".10" stroke-width="30" fill="none" stroke-linecap="round"/>
+        <path d="M56 392V318a12 12 0 0 1 12-12H128a12 12 0 0 0 12-12V140" stroke="var(--brand-ink)" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="16 13"/>
+        <rect x="42" y="384" width="28" height="28" rx="5" fill="var(--brand-ink)"/>
+        <rect x="50" y="392" width="12" height="12" rx="2" fill="var(--bg)"/>
+        <path d="M140 72c-16 0-28 12-28 27 0 20 28 47 28 47s28-27 28-47c0-15-12-27-28-27z" fill="var(--brand-ink)"/>
+        <path d="M128 102l12-10 12 10v12h-8v-8h-8v8h-8z" fill="var(--bg)"/>
+        <circle cx="140" cy="232" r="58" fill="var(--brand-ink)" fill-opacity=".10"/>
+        <circle cx="140" cy="232" r="44" fill="var(--brand-ink)" fill-opacity=".14"/>
+        <circle cx="140" cy="232" r="32" fill="var(--brand-ink)"/>
+        <g transform="translate(118 216) scale(.78)" fill="var(--bg)">
+          <rect x="0" y="12" width="13" height="13" rx="1.5"/>
+          <path d="M0 18.5h13" stroke="var(--brand-ink)" stroke-width="1.6"/>
+          <rect x="12" y="16" width="26" height="11" rx="4"/>
+          <rect x="16" y="24" width="34" height="8" rx="3"/>
+          <polygon points="42,10 48,10 53,32 45,32"/>
+          <path d="M46 10l10-3" stroke="var(--bg)" stroke-width="3.4" stroke-linecap="round"/>
+          <circle cx="27" cy="0" r="6.2"/>
+          <polygon points="21,8 33,8 35,21 19,21"/>
+          <path d="M32 11l13 2" stroke="var(--bg)" stroke-width="3.4" stroke-linecap="round"/>
+          <circle cx="12" cy="36" r="8"/><circle cx="12" cy="36" r="3" fill="var(--brand-ink)"/>
+          <circle cx="52" cy="36" r="8"/><circle cx="52" cy="36" r="3" fill="var(--brand-ink)"/>
+        </g>
+      </g>
+      <rect x="80" y="24" width="60" height="10" rx="5" fill="var(--brand-ink)"/>
+    </svg>
+  </div>
+</body>
+</html>

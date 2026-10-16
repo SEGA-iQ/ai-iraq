@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="ad-size" content="1080x1080">
+<title>التوصيل السريع — توصيل مجاني لأول طلب</title>
+<link rel="stylesheet" href="fonts/fonts.css">
+<style>
+  :root{
+    --brand:#F04E23;      /* block red-orange: field, stamp stripe, CTA bar — nothing else */
+    --brand-ink:#111111;  /* ink black */
+    --accent:#F04E23;     /* single accent = brand */
+    --bg:#F3EDE0;         /* paper cream */
+    --fg:#111111;
+    --m:72px;             /* outer margin */
+    --paper-w:300px;      /* cream block width */
+    --band-top:760px;     /* where the red field ends */
+  }
+  html,body{margin:0;width:1080px;height:1080px;overflow:hidden;background:var(--bg);color:var(--fg);
+    font-family:'Changa','Cairo',sans-serif;-webkit-font-smoothing:antialiased;}
+  *{box-sizing:border-box;letter-spacing:0}
+  .ltr{direction:ltr;unicode-bidi:isolate}
+
+  /* ---- blocks ---- */
+  .red{position:absolute;inset:0 0 auto 0;height:var(--band-top);background:var(--brand);}
+  .ink{position:absolute;left:var(--paper-w);right:0;top:var(--band-top);bottom:0;background:var(--brand-ink);overflow:hidden}
+  .paper{position:absolute;left:0;width:var(--paper-w);top:var(--band-top);bottom:0;background:var(--bg);}
+  .skyline{position:absolute;left:0;right:0;bottom:0;height:100px;opacity:.13}
+  .skyline svg{width:100%;height:100%;display:block}
+
+  /* ---- header: stamp wordmark + tagline ---- */
+  .brand{position:absolute;top:60px;right:var(--m);display:flex;align-items:center;gap:18px;color:var(--fg);}
+  .brand svg{width:64px;height:64px;display:block}
+  .brand .name{font:800 50px/1.15 'Changa';white-space:nowrap}
+  .tag{position:absolute;top:132px;right:var(--m);font:700 34px/1.3 'Cairo';color:var(--fg);white-space:nowrap}
+
+  /* ---- price sticker (top-left) ---- */
+  .sticker{position:absolute;left:var(--m);top:76px;width:292px;padding:14px 22px 10px;background:var(--bg);color:var(--fg);
+    transform:rotate(-4deg);transform-origin:50% 50%;text-align:center}
+  .sticker .k{font:700 34px/1.3 'Cairo';white-space:nowrap}
+  .sticker .v{font:800 80px/1.1 'Changa';white-space:nowrap;margin-top:-6px}
+
+  /* ---- headline: two lines, one unit ---- */
+  .hl{position:absolute;right:var(--m);top:244px;text-align:right;color:var(--fg);font:800 152px/1.15 'Changa'}
+  .hl div{white-space:nowrap}
+
+  /* ---- support row: place + deadline tag ---- */
+  .sup{position:absolute;right:var(--m);top:624px;display:flex;align-items:center;gap:20px;color:var(--fg);font:700 40px/1.3 'Cairo';white-space:nowrap}
+  .sup .dot{font-size:48px;line-height:1}
+  .sup .tagp{background:var(--bg);padding:6px 22px 8px;line-height:1.2}
+
+  /* ---- courier on the field ---- */
+  .rider{position:absolute;left:var(--m);top:560px;width:300px}
+  .rider svg{width:100%;height:auto;display:block}
+
+  /* ---- bottom band: CTA bar + phone ---- */
+  .cta{position:absolute;right:var(--m);left:calc(var(--paper-w) + 56px);top:786px;height:88px;
+    display:flex;align-items:center;gap:14px;background:var(--accent);color:var(--fg);padding:0 30px 0 26px;white-space:nowrap}
+  .cta .t{font:800 52px/1 'Changa';margin-top:-4px}
+  .cta .sp{flex:1}
+  .cta .arr{display:flex;align-items:center}
+  .cta .arr svg{width:50px;height:50px;display:block}
+  .phone{position:absolute;right:var(--m);top:888px;color:var(--bg);font:800 92px/1.05 'Changa';white-space:nowrap}
+
+  /* ---- parcel mark in the cream block ---- */
+  .mark{position:absolute;left:0;width:var(--paper-w);top:var(--band-top);bottom:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:0 60px 6px}
+  .mark svg{width:130px;height:130px;display:block}
+  .mark .cap{font:700 36px/1.3 'Cairo';color:var(--fg);white-space:nowrap}
+</style>
+</head>
+<body>
+  <div class="red"></div>
+  <div class="ink">
+    <!-- Baghdad skyline, low opacity: Jadriya bridge, palms, dome and minarets -->
+    <div class="skyline">
+      <svg viewBox="0 0 780 120" preserveAspectRatio="xMidYMax slice" aria-hidden="true" fill="var(--bg)">
+        <!-- suspension bridge -->
+        <rect x="0" y="86" width="250" height="8"/>
+        <rect x="46" y="26" width="8" height="70"/><rect x="176" y="26" width="8" height="70"/>
+        <path d="M0 48 Q50 26 50 26 Q113 70 180 26 Q215 26 250 60 V64 Q215 32 180 32 Q113 76 50 32 Q20 38 0 54Z"/>
+        <path d="M50 30 V86 M70 44 V86 M90 56 V86 M110 64 V86 M130 62 V86 M150 54 V86 M170 40 V86 M200 36 V86 M220 46 V86 M240 58 V86" stroke="var(--bg)" stroke-width="2.5" fill="none"/>
+        <!-- palms -->
+        <rect x="286" y="60" width="5" height="40"/>
+        <path d="M288 62c-20-4-34-14-38-30 15 2 27 10 38 24 11-14 23-22 38-24-4 16-18 26-38 30z"/>
+        <path d="M288 63c-10-10-14-24-10-38 7 9 11 21 10 38-1-17 3-29 10-38 4 14 0 28-10 38z"/>
+        <rect x="334" y="70" width="5" height="30"/>
+        <path d="M336 72c-16-3-27-11-30-24 12 2 21 8 30 19 9-11 18-17 30-19-3 13-14 21-30 24z"/>
+        <!-- blocks -->
+        <rect x="360" y="52" width="44" height="50"/><rect x="412" y="66" width="30" height="36"/>
+        <!-- mosque: dome + minarets -->
+        <path d="M470 102V74c0-30 56-30 56 0v28z"/>
+        <path d="M462 102V36l5-10 5 10v66zM524 102V36l5-10 5 10v66z"/>
+        <!-- split dome (Shaheed) -->
+        <path d="M600 102V70c0-22-26-28-34-10-6 14-10 28-10 42z"/>
+        <path d="M612 102c0-14-4-28-10-42-8-18-34-12-34 10v32z"/>
+        <!-- towers -->
+        <rect x="632" y="44" width="36" height="58"/><rect x="676" y="58" width="28" height="44"/>
+        <rect x="716" y="30" width="6" height="72"/><circle cx="719" cy="26" r="7"/>
+        <rect x="736" y="64" width="44" height="38"/>
+        <!-- ground -->
+        <rect x="0" y="100" width="780" height="20"/>
+      </svg>
+    </div>
+  </div>
+  <div class="paper"></div>
+
+  <!-- wordmark: perforated ink stamp, brand-stripe cut, RTL forward arrow -->
+  <div class="brand">
+    <svg viewBox="0 0 64 64" aria-hidden="true">
+      <defs>
+        <mask id="perf">
+          <rect width="64" height="64" fill="#fff"/>
+          <g fill="#000">
+            <circle cx="0" cy="8" r="4"/><circle cx="0" cy="20" r="4"/><circle cx="0" cy="32" r="4"/><circle cx="0" cy="44" r="4"/><circle cx="0" cy="56" r="4"/>
+            <circle cx="64" cy="8" r="4"/><circle cx="64" cy="20" r="4"/><circle cx="64" cy="32" r="4"/><circle cx="64" cy="44" r="4"/><circle cx="64" cy="56" r="4"/>
+            <circle cx="8" cy="0" r="4"/><circle cx="20" cy="0" r="4"/><circle cx="32" cy="0" r="4"/><circle cx="44" cy="0" r="4"/><circle cx="56" cy="0" r="4"/>
+            <circle cx="8" cy="64" r="4"/><circle cx="20" cy="64" r="4"/><circle cx="32" cy="64" r="4"/><circle cx="44" cy="64" r="4"/><circle cx="56" cy="64" r="4"/>
+            <rect x="0" y="42" width="64" height="10"/>
+          </g>
+        </mask>
+      </defs>
+      <rect width="64" height="64" fill="var(--brand-ink)" mask="url(#perf)"/>
+      <rect x="0" y="42" width="64" height="10" fill="var(--brand)"/>
+      <path d="M48 25H18" stroke="var(--bg)" stroke-width="6" stroke-linecap="round"/>
+      <path d="M27 15 17 25l10 10" stroke="var(--bg)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    </svg>
+    <div class="name">التوصيل السريع</div>
+  </div>
+  <div class="tag">دليفري داخل بغداد وللمحافظات</div>
+
+  <!-- price sticker -->
+  <div class="sticker">
+    <div class="k">أجرة التوصيل</div>
+    <div class="v"><span class="ltr">0</span> د.ع</div>
+  </div>
+
+  <!-- headline -->
+  <div class="hl">
+    <div>توصيل مجاني</div>
+    <div>لأول طلب</div>
+  </div>
+
+  <!-- support -->
+  <div class="sup">
+    <span>داخل بغداد</span>
+    <span class="dot">·</span>
+    <span class="tagp">لغاية نهاية الشهر</span>
+  </div>
+
+  <!-- courier: rounded cream motorbike with parcel, riding forward (RTL) -->
+  <div class="rider">
+    <svg viewBox="0 0 380 260" aria-hidden="true">
+      <!-- wheels -->
+      <circle cx="300" cy="200" r="42" fill="none" stroke="var(--bg)" stroke-width="16"/>
+      <circle cx="300" cy="200" r="9" fill="var(--bg)"/>
+      <circle cx="70" cy="200" r="42" fill="none" stroke="var(--bg)" stroke-width="16"/>
+      <circle cx="70" cy="200" r="9" fill="var(--bg)"/>
+      <!-- fork + handlebar -->
+      <path d="M70 200L104 106" stroke="var(--bg)" stroke-width="11" stroke-linecap="round"/>
+      <path d="M86 102h50" stroke="var(--bg)" stroke-width="11" stroke-linecap="round"/>
+      <!-- headlight -->
+      <circle cx="86" cy="124" r="13" fill="var(--bg)"/>
+      <!-- front fender -->
+      <path d="M28 186a42 42 0 0 1 50-40" stroke="var(--bg)" stroke-width="11" stroke-linecap="round" fill="none"/>
+      <!-- tank -->
+      <path d="M126 126h98a20 20 0 0 1 20 20v18H150a24 24 0 0 1-24-24z" fill="var(--bg)"/>
+      <!-- engine -->
+      <rect x="134" y="166" width="70" height="42" rx="9" fill="var(--bg)"/>
+      <!-- frame -->
+      <path d="M140 170L96 196M204 192l96 8M232 160l68 40" stroke="var(--bg)" stroke-width="10" stroke-linecap="round"/>
+      <!-- seat -->
+      <path d="M226 128h84a10 10 0 0 1 10 10v8H226z" fill="var(--bg)"/>
+      <!-- rear fender -->
+      <path d="M258 170a44 44 0 0 1 76-26" stroke="var(--bg)" stroke-width="11" stroke-linecap="round" fill="none"/>
+      <!-- rack + parcel (cream box, ink strap) -->
+      <rect x="312" y="128" width="58" height="9" fill="var(--bg)"/>
+      <rect x="314" y="70" width="56" height="56" rx="4" fill="var(--bg)"/>
+      <rect x="314" y="92" width="56" height="12" fill="var(--brand-ink)"/>
+      <!-- rider: leg -->
+      <path d="M264 140L218 174" stroke="var(--bg)" stroke-width="22" stroke-linecap="round"/>
+      <path d="M218 174l-10 30" stroke="var(--bg)" stroke-width="16" stroke-linecap="round"/>
+      <path d="M196 206h28" stroke="var(--bg)" stroke-width="10" stroke-linecap="round"/>
+      <!-- torso -->
+      <path d="M268 132L212 82" stroke="var(--bg)" stroke-width="38" stroke-linecap="round"/>
+      <!-- arm -->
+      <path d="M214 90L122 104" stroke="var(--bg)" stroke-width="17" stroke-linecap="round"/>
+      <!-- helmet with ink visor -->
+      <circle cx="190" cy="48" r="31" fill="var(--bg)"/>
+      <path d="M160 50a30 30 0 0 1 6-18" stroke="var(--brand-ink)" stroke-width="9" stroke-linecap="round" fill="none"/>
+    </svg>
+  </div>
+
+  <!-- CTA bar: order now + forward arrow (RTL) -->
+  <div class="cta">
+    <span class="t">اطلب هسه</span>
+    <span class="sp"></span>
+    <span class="arr" aria-hidden="true">
+      <svg viewBox="0 0 48 48"><path d="M40 24H10" stroke="var(--fg)" stroke-width="6" stroke-linecap="round"/><path d="M22 10 8 24l14 14" stroke="var(--fg)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+    </span>
+  </div>
+  <div class="phone ltr">0770 000 0000</div>
+
+  <!-- isometric parcel + doorstep caption -->
+  <div class="mark">
+    <svg viewBox="0 0 200 200" aria-hidden="true">
+      <polygon points="100,180 31,140 31,60 100,100" fill="var(--brand-ink)" fill-opacity=".82"/>
+      <polygon points="100,180 169,140 169,60 100,100" fill="var(--brand-ink)" fill-opacity=".62"/>
+      <polygon points="100,100 169,60 100,20 31,60" fill="var(--brand-ink)"/>
+      <!-- strap band: across the top, down the left face -->
+      <polygon points="60,77 71,83 140,43 129,37" fill="var(--bg)"/>
+      <polygon points="60,77 71,83 71,163 60,157" fill="var(--bg)"/>
+      <!-- label on right face -->
+      <polygon points="118,148 152,128 152,102 118,122" fill="var(--bg)"/>
+    </svg>
+    <div class="cap">لباب بيتك</div>
+  </div>
+</body>
+</html>
