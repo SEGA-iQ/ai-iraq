@@ -10,6 +10,11 @@ const compat = new FlatCompat({ baseDirectory: __dirname });
 const eslintConfig = [
   ...compat.extends("next/core-web-vitals", "next/typescript"),
   { ignores: [".next/**", "node_modules/**", "out/**", "next-env.d.ts"] },
+  {
+    // Node build scripts are CommonJS on purpose so they run without a build step.
+    files: ["scripts/**/*.cjs"],
+    rules: { "@typescript-eslint/no-require-imports": "off" },
+  },
 ];
 
 export default eslintConfig;

@@ -19,3 +19,6 @@ data/*.json.tmp
 .DS_Store
 *.tsbuildinfo
 next-env.d.ts
+
+# motion previews (regenerated on demand)
+design/motion/preview/

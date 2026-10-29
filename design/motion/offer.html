@@ -1,0 +1,770 @@
+<!doctype html>
+<html lang="ar" dir="rtl" data-format="story">
+<head>
+<meta charset="utf-8">
+<meta name="motion" content="duration=15; fps=30; formats=story:1080x1920,feed:1080x1350">
+<title>التوصيل السريع — توصيل مجاني لأول طلب (فيديو)</title>
+<script>
+  // ?format=feed switches to the 4:5 layout; ?t=3.2 freezes on one moment (preview).
+  document.documentElement.dataset.format = new URLSearchParams(location.search).get("format") || "story";
+</script>
+<link rel="stylesheet" href="../ads/fonts/fonts.css">
+<style>
+  /* ============================================================
+     Edit brand colors here. Text (name, phone, offer) is in the HTML below.
+     ============================================================ */
+  :root{
+    --brand:#F04E23;   /* orange field, CTA bar, route */
+    --ink:#111111;     /* black */
+    --bg:#F3EDE0;      /* cream */
+    --river:#E4D8C2;   /* map water, a shade of cream */
+    --m:90px;          /* side margin: keeps text clear of Reels/TikTok buttons */
+  }
+  html[data-format=feed]{ --m:72px }
+
+  html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:var(--brand)}
+  html[data-format=feed],html[data-format=feed] body{height:1350px}
+  *{box-sizing:border-box;letter-spacing:0}
+  body{font-family:'Changa','Cairo',sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
+  .ltr{direction:ltr;unicode-bidi:isolate}
+  svg{display:block;overflow:visible}
+
+  /* fixed clipping frame: in an RTL page, content that grows past the left edge would otherwise shift the view */
+  #frame{position:absolute;inset:0;overflow:hidden}
+  #cam{position:absolute;inset:0}
+  .scene{position:absolute;inset:0;overflow:hidden;visibility:hidden}
+
+  /* ---------- shared pieces ---------- */
+  .brand{position:absolute;right:var(--m);display:flex;align-items:center;gap:20px;white-space:nowrap}
+  .brand .name{font:800 54px/1.15 'Changa'}
+  .big{position:absolute;right:var(--m);text-align:right;white-space:nowrap;font-family:'Changa';font-weight:800;line-height:1.12}
+  .big > div{white-space:nowrap}
+  /* word mask: each word slides up out of its own clip box; padding keeps Arabic dots unclipped */
+  .w{display:inline-block;overflow:hidden;vertical-align:top;padding:.24em .06em .32em;margin:-.24em -.06em -.32em}
+  .w > i{display:inline-block;font-style:normal}
+
+  /* ---------- S1: hook ---------- */
+  #s1{background:var(--brand)}
+  #b1{top:300px}
+  #s1a{top:420px;font-size:260px}
+  #s1b{top:700px;font-size:320px}
+  #s1rule{position:absolute;right:var(--m);height:16px;background:var(--ink);transform-origin:100% 50%}
+  #r1{position:absolute;left:0;width:470px}
+  #g1{position:absolute;left:0;right:0;bottom:0;background:var(--ink)}
+  .speed line{stroke:var(--bg);stroke-linecap:round}
+
+  /* ---------- S2: price sticker ---------- */
+  #s2{background:var(--ink)}
+  #s2a{top:330px;font-size:210px;color:var(--bg)}
+  #stk{position:absolute;left:150px;top:690px;width:780px;background:var(--bg);color:var(--ink);text-align:center;padding:30px 30px 18px}
+  #stk .k{font:700 72px/1.25 'Cairo';white-space:nowrap}
+  #vword{width:100%;height:auto;margin-top:-8px}
+  #vtext{font:800 300px 'Changa';fill:var(--ink)}
+  #burst{position:absolute;left:0;top:0;width:1px;height:1px}
+  #burst line{stroke:var(--brand);stroke-width:16;stroke-linecap:round}
+
+  /* ---------- S3: route map ---------- */
+  #s3{background:var(--bg)}
+  #map{position:absolute;left:0;top:560px;width:1080px;height:1100px;transform-origin:50% 40%}
+  #s3a{top:300px;font-size:200px}
+  .chip{position:absolute;white-space:nowrap;background:var(--ink);color:var(--bg);font:700 46px/1.2 'Cairo';padding:8px 28px 12px}
+
+  /* ---------- S4: ride through Baghdad ---------- */
+  #s4{background:var(--brand)}
+  #s4a{top:320px;font-size:190px}
+  #chip4{position:absolute;right:var(--m);top:600px;white-space:nowrap;background:var(--bg);color:var(--ink);font:700 80px/1.2 'Cairo';padding:8px 36px 16px;transform-origin:100% 50%}
+  #sky4{position:absolute;left:0;top:860px;height:380px;width:4940px}
+  #sky4 svg{float:left;width:2470px;height:380px;fill:var(--ink)}
+  #ground4{position:absolute;left:0;right:0;top:1236px;bottom:0;background:var(--ink)}
+  #road{position:absolute;left:-200px;top:1300px;width:1480px;height:12px;
+    background:repeating-linear-gradient(90deg,var(--bg) 0 80px,transparent 80px 160px)}
+  #r4{position:absolute;left:120px;top:883px;width:540px}
+
+  /* ---------- S5: end card ---------- */
+  #s5{visibility:hidden}
+  #b5{top:300px}
+  #b5 .name{font-size:62px}
+  #t5{position:absolute;right:var(--m);top:392px;font:700 40px/1.3 'Cairo';white-space:nowrap}
+  #s5a{top:470px;font-size:150px}
+  #band{position:absolute;left:0;right:0;top:870px;height:1050px;background:var(--ink)}
+  #ground5{position:absolute;left:0;right:0;top:420px;bottom:0;background:var(--bg);overflow:hidden}
+  #sky5{position:absolute;left:-12%;right:-12%;bottom:0;height:260px;opacity:.18}
+  #sky5 svg{width:100%;height:100%;fill:var(--ink)}
+  #cta{position:absolute;left:var(--m);right:var(--m);top:45px;height:120px;background:var(--brand);overflow:hidden;
+    display:flex;align-items:center;padding:0 36px 0 30px}
+  #cta .t{font:800 66px/1 'Changa';margin-top:-6px;white-space:nowrap}
+  #cta .sp{flex:1}
+  #cta .arr{width:58px;height:58px}
+  #shine{position:absolute;top:-40px;bottom:-40px;width:120px;background:var(--bg);opacity:.32;transform:skewX(-18deg)}
+  #phone{position:absolute;right:var(--m);top:8px;color:var(--bg);font:800 114px/1.1 'Changa';white-space:nowrap}
+  #phoneMask{position:absolute;left:0;right:0;top:186px;height:150px;overflow:hidden}
+
+  /* =================== 4:5 feed layout =================== */
+  html[data-format=feed] #b1{top:70px}
+  html[data-format=feed] #s1a{top:170px;font-size:230px}
+  html[data-format=feed] #s1b{top:420px;font-size:300px}
+  html[data-format=feed] #s2a{top:90px;font-size:190px}
+  html[data-format=feed] #stk{top:430px;width:720px;left:180px}
+  html[data-format=feed] #s3a{top:70px;font-size:180px}
+  html[data-format=feed] #map{top:300px}
+  html[data-format=feed] #s4a{top:80px;font-size:180px}
+  html[data-format=feed] #chip4{top:340px;font-size:72px}
+  html[data-format=feed] #sky4{top:640px;height:340px}
+  html[data-format=feed] #sky4 svg{width:2210px;height:340px}
+  html[data-format=feed] #ground4{top:976px}
+  html[data-format=feed] #road{top:1040px}
+  html[data-format=feed] #r4{top:631px;width:520px}
+  html[data-format=feed] #b5{top:70px}
+  html[data-format=feed] #t5{top:160px}
+  html[data-format=feed] #s5a{top:240px;font-size:140px}
+  html[data-format=feed] #band{top:610px;height:740px}
+  html[data-format=feed] #ground5{top:390px}
+  html[data-format=feed] #sky5{height:210px}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <mask id="perf" maskContentUnits="userSpaceOnUse">
+      <rect width="64" height="64" fill="#fff"/>
+      <g fill="#000">
+        <circle cx="0" cy="8" r="4"/><circle cx="0" cy="20" r="4"/><circle cx="0" cy="32" r="4"/><circle cx="0" cy="44" r="4"/><circle cx="0" cy="56" r="4"/>
+        <circle cx="64" cy="8" r="4"/><circle cx="64" cy="20" r="4"/><circle cx="64" cy="32" r="4"/><circle cx="64" cy="44" r="4"/><circle cx="64" cy="56" r="4"/>
+        <circle cx="8" cy="0" r="4"/><circle cx="20" cy="0" r="4"/><circle cx="32" cy="0" r="4"/><circle cx="44" cy="0" r="4"/><circle cx="56" cy="0" r="4"/>
+        <circle cx="8" cy="64" r="4"/><circle cx="20" cy="64" r="4"/><circle cx="32" cy="64" r="4"/><circle cx="44" cy="64" r="4"/><circle cx="56" cy="64" r="4"/>
+        <rect x="0" y="42" width="64" height="10"/>
+      </g>
+    </mask>
+
+    <!-- wordmark stamp: perforated ink square, orange stripe, forward (RTL) arrow -->
+    <symbol id="stamp" viewBox="0 0 64 64">
+      <rect width="64" height="64" fill="var(--ink)" mask="url(#perf)"/>
+      <rect x="0" y="42" width="64" height="10" fill="var(--brand)"/>
+      <g class="stampArrow">
+        <path d="M48 25H18" stroke="var(--bg)" stroke-width="6" stroke-linecap="round"/>
+        <path d="M27 15 17 25l10 10" stroke="var(--bg)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      </g>
+    </symbol>
+
+    <!-- courier on a motorbike, cream silhouette, facing left (forward in RTL) -->
+    <symbol id="courier" viewBox="0 0 380 260">
+      <circle cx="300" cy="200" r="42" fill="none" stroke="var(--bg)" stroke-width="16"/>
+      <circle cx="300" cy="200" r="9" fill="var(--bg)"/>
+      <circle cx="70" cy="200" r="42" fill="none" stroke="var(--bg)" stroke-width="16"/>
+      <circle cx="70" cy="200" r="9" fill="var(--bg)"/>
+      <path d="M70 200L104 106" stroke="var(--bg)" stroke-width="11" stroke-linecap="round"/>
+      <path d="M86 102h50" stroke="var(--bg)" stroke-width="11" stroke-linecap="round"/>
+      <circle cx="86" cy="124" r="13" fill="var(--bg)"/>
+      <path d="M28 186a42 42 0 0 1 50-40" stroke="var(--bg)" stroke-width="11" stroke-linecap="round" fill="none"/>
+      <path d="M126 126h98a20 20 0 0 1 20 20v18H150a24 24 0 0 1-24-24z" fill="var(--bg)"/>
+      <rect x="134" y="166" width="70" height="42" rx="9" fill="var(--bg)"/>
+      <path d="M140 170L96 196M204 192l96 8M232 160l68 40" stroke="var(--bg)" stroke-width="10" stroke-linecap="round"/>
+      <path d="M226 128h84a10 10 0 0 1 10 10v8H226z" fill="var(--bg)"/>
+      <path d="M258 170a44 44 0 0 1 76-26" stroke="var(--bg)" stroke-width="11" stroke-linecap="round" fill="none"/>
+      <rect x="312" y="128" width="58" height="9" fill="var(--bg)"/>
+      <rect x="314" y="70" width="56" height="56" rx="4" fill="var(--bg)"/>
+      <rect x="314" y="92" width="56" height="12" fill="var(--ink)"/>
+      <path d="M264 140L218 174" stroke="var(--bg)" stroke-width="22" stroke-linecap="round"/>
+      <path d="M218 174l-10 30" stroke="var(--bg)" stroke-width="16" stroke-linecap="round"/>
+      <path d="M196 206h28" stroke="var(--bg)" stroke-width="10" stroke-linecap="round"/>
+      <path d="M268 132L212 82" stroke="var(--bg)" stroke-width="38" stroke-linecap="round"/>
+      <path d="M214 90L122 104" stroke="var(--bg)" stroke-width="17" stroke-linecap="round"/>
+      <circle cx="190" cy="48" r="31" fill="var(--bg)"/>
+      <path d="M160 50a30 30 0 0 1 6-18" stroke="var(--ink)" stroke-width="9" stroke-linecap="round" fill="none"/>
+    </symbol>
+
+    <!-- Baghdad skyline: suspension bridge, palms, mosque, split dome, tower -->
+    <symbol id="skyline" viewBox="0 0 780 120" preserveAspectRatio="none">
+      <rect x="0" y="86" width="250" height="8"/>
+      <rect x="46" y="26" width="8" height="70"/><rect x="176" y="26" width="8" height="70"/>
+      <path d="M0 48 Q50 26 50 26 Q113 70 180 26 Q215 26 250 60 V64 Q215 32 180 32 Q113 76 50 32 Q20 38 0 54Z"/>
+      <path d="M50 30 V86 M70 44 V86 M90 56 V86 M110 64 V86 M130 62 V86 M150 54 V86 M170 40 V86 M200 36 V86 M220 46 V86 M240 58 V86" stroke="currentColor" stroke-width="2.5" fill="none"/>
+      <rect x="286" y="60" width="5" height="40"/>
+      <path d="M288 62c-20-4-34-14-38-30 15 2 27 10 38 24 11-14 23-22 38-24-4 16-18 26-38 30z"/>
+      <path d="M288 63c-10-10-14-24-10-38 7 9 11 21 10 38-1-17 3-29 10-38 4 14 0 28-10 38z"/>
+      <rect x="334" y="70" width="5" height="30"/>
+      <path d="M336 72c-16-3-27-11-30-24 12 2 21 8 30 19 9-11 18-17 30-19-3 13-14 21-30 24z"/>
+      <rect x="360" y="52" width="44" height="50"/><rect x="412" y="66" width="30" height="36"/>
+      <path d="M470 102V74c0-30 56-30 56 0v28z"/>
+      <path d="M462 102V36l5-10 5 10v66zM524 102V36l5-10 5 10v66z"/>
+      <path d="M600 102V70c0-22-26-28-34-10-6 14-10 28-10 42z"/>
+      <path d="M612 102c0-14-4-28-10-42-8-18-34-12-34 10v32z"/>
+      <rect x="632" y="44" width="36" height="58"/><rect x="676" y="58" width="28" height="44"/>
+      <rect x="716" y="30" width="6" height="72"/><circle cx="719" cy="26" r="7"/>
+      <rect x="736" y="64" width="44" height="38"/>
+      <rect x="0" y="100" width="780" height="20"/>
+    </symbol>
+
+    <symbol id="arrow" viewBox="0 0 48 48">
+      <path d="M40 24H10" stroke="var(--ink)" stroke-width="6" stroke-linecap="round"/>
+      <path d="M22 10 8 24l14 14" stroke="var(--ink)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    </symbol>
+
+    <!-- map pin, tip at 0,0, head centre at 0,-112 -->
+    <path id="pinShape" d="M0 0C-22-38-66-70-66-112A66 66 0 1 1 66-112C66-70 22-38 0 0Z"/>
+  </defs>
+</svg>
+
+<div id="frame"><div id="cam">
+
+<!-- ======================= S1 · hook ======================= -->
+<section id="s1" class="scene">
+  <div class="brand" id="b1"><svg width="64" height="64" viewBox="0 0 64 64"><rect width="64" height="64" fill="var(--ink)" mask="url(#perf)"/>
+      <rect x="0" y="42" width="64" height="10" fill="var(--brand)"/>
+      <g class="stampArrow" id="arr1">
+        <path d="M48 25H18" stroke="var(--bg)" stroke-width="6" stroke-linecap="round"/>
+        <path d="M27 15 17 25l10 10" stroke="var(--bg)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      </g></svg><div class="name">التوصيل السريع</div></div>
+  <div class="big" id="s1a"><div>توصيل</div></div>
+  <div class="big" id="s1b"><div>مجاني</div></div>
+  <div id="g1"></div>
+  <div id="r1">
+    <svg class="speed" id="sp1" width="470" height="322" viewBox="0 0 470 322">
+      <line x1="470" y1="120" x2="700" y2="120" stroke-width="12"/>
+      <line x1="440" y1="170" x2="800" y2="170" stroke-width="10"/>
+      <line x1="430" y1="220" x2="640" y2="220" stroke-width="12"/>
+      <line x1="470" y1="268" x2="760" y2="268" stroke-width="8"/>
+    </svg>
+    <svg viewBox="0 0 380 260" style="position:absolute;inset:0;width:470px;height:322px"><use href="#courier"/></svg>
+  </div>
+</section>
+
+<!-- ======================= S2 · zero delivery fee ======================= -->
+<section id="s2" class="scene">
+  <div class="big" id="s2a"><div><span class="w"><i>لأول</i></span> <span class="w"><i>طلب</i></span></div></div>
+  <svg id="burst" aria-hidden="true"></svg>
+  <div id="stk">
+    <div class="k">أجرة التوصيل</div>
+    <svg id="vword" viewBox="0 0 720 380" aria-label="صفر"><text id="vtext" x="360" y="262" text-anchor="middle" direction="rtl">صفر</text></svg>
+  </div>
+  <div id="s1stripe" style="position:absolute;top:0;bottom:0;width:44px;background:var(--bg);left:-100px"></div>
+</section>
+
+<!-- ======================= S3 · shop → door ======================= -->
+<section id="s3" class="scene">
+  <svg id="map" viewBox="0 0 1080 1100" aria-hidden="true">
+    <defs>
+      <linearGradient id="fadeTop" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#fff" stop-opacity="0"/>
+        <stop offset=".12" stop-color="#fff" stop-opacity="1"/>
+      </linearGradient>
+      <mask id="mapMask" maskUnits="userSpaceOnUse" x="-200" y="-200" width="1480" height="1500">
+        <rect x="-200" y="-200" width="1480" height="1500" fill="url(#fadeTop)"/>
+      </mask>
+    </defs>
+    <g id="mapBase" mask="url(#mapMask)">
+      <!-- the Tigris -->
+      <path id="river" d="M-120 520C120 470 220 330 420 380S700 560 860 470 1060 380 1220 430" stroke="var(--river)" stroke-width="120" fill="none" stroke-linecap="round"/>
+      <!-- city blocks -->
+      <g fill="var(--ink)" fill-opacity=".045">
+        <rect x="76" y="56" width="108" height="108" rx="10"/><rect x="216" y="56" width="108" height="108" rx="10"/>
+        <rect x="356" y="196" width="108" height="108" rx="10"/><rect x="636" y="56" width="108" height="108" rx="10"/>
+        <rect x="916" y="196" width="108" height="108" rx="10"/><rect x="76" y="616" width="108" height="108" rx="10"/>
+        <rect x="356" y="616" width="108" height="108" rx="10"/><rect x="776" y="616" width="108" height="108" rx="10"/>
+        <rect x="496" y="756" width="108" height="108" rx="10"/><rect x="216" y="896" width="108" height="108" rx="10"/>
+        <rect x="776" y="896" width="108" height="108" rx="10"/><rect x="916" y="756" width="108" height="108" rx="10"/>
+      </g>
+      <!-- streets -->
+      <g stroke="var(--ink)" stroke-opacity=".08" stroke-width="3">
+        <path d="M60 -40V1140M200 -40V1140M340 -40V1140M480 -40V1140M620 -40V1140M760 -40V1140M900 -40V1140M1040 -40V1140"/>
+        <path d="M-40 40H1120M-40 180H1120M-40 320H1120M-40 460H1120M-40 600H1120M-40 740H1120M-40 880H1120M-40 1020H1120"/>
+      </g>
+      <g stroke="var(--ink)" stroke-opacity=".05" stroke-width="26">
+        <path d="M-40 320H1120M620 -40V1140"/>
+      </g>
+    </g>
+    <!-- route: shop (820,230) → door (260,600) along the streets, over the river -->
+    <g id="mapFx">
+    <path id="routeBg" d="M820 230V290Q820 320 790 320H650Q620 320 620 350V570Q620 600 590 600H260" stroke="var(--ink)" stroke-opacity=".12" stroke-width="22" fill="none" stroke-linecap="round" stroke-dasharray="2 22"/>
+    <path id="route" d="M820 230V290Q820 320 790 320H650Q620 320 620 350V570Q620 600 590 600H260" stroke="var(--brand)" stroke-width="22" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- bridge rails where the route crosses the water -->
+    <g id="bridge" stroke="var(--ink)" stroke-width="6" stroke-linecap="round">
+      <path d="M596 400V520M644 400V520"/>
+    </g>
+    </g>
+    <!-- shop pin -->
+    <g id="pinShop" transform="translate(820 230)">
+      <ellipse id="shShadow" cx="0" cy="4" rx="34" ry="10" fill="var(--ink)" fill-opacity=".14"/>
+      <g id="pinShopBody">
+        <use href="#pinShape" fill="var(--ink)"/>
+        <g transform="translate(0 -114) scale(.42) translate(-100 -108)">
+          <path d="M22 34H178V70a15.6 15.6 0 0 1-31.2 0a15.6 15.6 0 0 1-31.2 0a15.6 15.6 0 0 1-31.2 0a15.6 15.6 0 0 1-31.2 0a15.6 15.6 0 0 1-31.2 0Z" fill="var(--bg)"/>
+          <rect x="34" y="84" width="132" height="98" fill="var(--bg)"/>
+          <rect x="54" y="112" width="34" height="70" fill="var(--ink)"/>
+          <rect x="106" y="104" width="44" height="34" fill="var(--ink)"/>
+        </g>
+      </g>
+    </g>
+    <!-- home pin -->
+    <g id="pinHome" transform="translate(260 600)">
+      <ellipse id="hmShadow" cx="0" cy="4" rx="34" ry="10" fill="var(--ink)" fill-opacity=".14"/>
+      <g id="ripples" fill="none" stroke="var(--brand)" stroke-width="8">
+        <circle id="rip1" cx="0" cy="-112" r="0"/><circle id="rip2" cx="0" cy="-112" r="0"/>
+      </g>
+      <g id="pinHomeBody">
+        <use href="#pinShape" fill="var(--brand)"/>
+        <g id="house" transform="translate(0 -112) scale(3.6) translate(-140 -103)">
+          <path d="M128 102l12-10 12 10v12h-8v-8h-8v8h-8z" fill="var(--bg)"/>
+        </g>
+      </g>
+      <g id="check" transform="translate(52 -170)">
+        <circle r="30" fill="var(--ink)"/>
+        <path d="M-13 1l8 8 17-17" stroke="var(--bg)" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      </g>
+    </g>
+    <!-- courier dot travelling the route -->
+    <g id="dot">
+      <circle r="44" fill="var(--ink)"/>
+      <g transform="scale(1.15) translate(-28 -20)" fill="var(--bg)">
+        <rect x="0" y="12" width="13" height="13" rx="1.5"/>
+        <rect x="12" y="16" width="26" height="11" rx="4"/>
+        <rect x="16" y="24" width="34" height="8" rx="3"/>
+        <polygon points="42,10 48,10 53,32 45,32"/>
+        <path d="M46 10l10-3" stroke="var(--bg)" stroke-width="3.4" stroke-linecap="round"/>
+        <circle cx="27" cy="0" r="6.2"/>
+        <polygon points="21,8 33,8 35,21 19,21"/>
+        <path d="M32 11l13 2" stroke="var(--bg)" stroke-width="3.4" stroke-linecap="round"/>
+        <circle cx="12" cy="36" r="8"/><circle cx="12" cy="36" r="3" fill="var(--ink)"/>
+        <circle cx="52" cy="36" r="8"/><circle cx="52" cy="36" r="3" fill="var(--ink)"/>
+      </g>
+    </g>
+  </svg>
+  <div class="big" id="s3a"><div><span class="w"><i>لباب</i></span> <span class="w"><i>بيتك</i></span></div></div>
+  <div class="chip" id="chip3">من المتجر</div>
+</section>
+
+<!-- ======================= S4 · across Baghdad ======================= -->
+<section id="s4" class="scene">
+  <div id="sky4" style="color:var(--ink)"><svg><use href="#skyline"/></svg><svg><use href="#skyline"/></svg></div>
+  <div id="ground4"></div>
+  <div id="road"></div>
+  <div id="r4">
+    <svg class="speed" id="sp4" width="540" height="369" viewBox="0 0 540 369">
+      <line x1="560" y1="120" x2="760" y2="120" stroke-width="12"/>
+      <line x1="530" y1="180" x2="840" y2="180" stroke-width="10"/>
+      <line x1="520" y1="240" x2="700" y2="240" stroke-width="12"/>
+      <line x1="560" y1="300" x2="820" y2="300" stroke-width="8"/>
+    </svg>
+    <svg id="r4bike" viewBox="0 0 380 260" style="position:absolute;inset:0;width:540px;height:369px"><use href="#courier"/></svg>
+  </div>
+  <div class="big" id="s4a"><div><span class="w"><i>داخل</i></span> <span class="w"><i>بغداد</i></span></div></div>
+  <div id="chip4">لغاية نهاية الشهر</div>
+</section>
+
+<!-- ======================= S5 · end card ======================= -->
+<section id="s5" class="scene">
+  <div id="band">
+    <div id="cta">
+      <span class="t" id="ctaT">اطلب هسه</span>
+      <span class="sp"></span>
+      <svg class="arr" id="ctaArr" viewBox="0 0 48 48"><use href="#arrow"/></svg>
+      <div id="shine"></div>
+    </div>
+    <div id="phoneMask"><div id="phone" class="ltr">0770 000 0000</div></div>
+    <div id="ground5"><div id="sky5" style="color:var(--ink)"><svg><use href="#skyline"/></svg></div></div>
+  </div>
+  <div class="brand" id="b5"><svg id="stamp5" width="84" height="84" viewBox="0 0 64 64"><rect width="64" height="64" fill="var(--ink)" mask="url(#perf)"/>
+      <rect x="0" y="42" width="64" height="10" fill="var(--brand)"/>
+      <g class="stampArrow" id="arr5">
+        <path d="M48 25H18" stroke="var(--bg)" stroke-width="6" stroke-linecap="round"/>
+        <path d="M27 15 17 25l10 10" stroke="var(--bg)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      </g></svg><div class="name" id="name5">التوصيل السريع</div></div>
+  <div id="t5">دليفري داخل بغداد وللمحافظات</div>
+  <div class="big" id="s5a">
+    <div><span class="w"><i>توصيل</i></span> <span class="w"><i>مجاني</i></span></div>
+    <div><span class="w"><i>لأول</i></span> <span class="w"><i>طلب</i></span></div>
+  </div>
+</section>
+
+</div></div>
+
+<script>
+/* ===================================================================
+   Timeline engine. render(t) draws the frame at time t (seconds).
+   Nothing animates on its own, so any frame can be rendered exactly.
+   =================================================================== */
+const DURATION = 15, FPS = 30, BPM = 120;
+const FMT = document.documentElement.dataset.format;
+const W = 1080, H = FMT === "feed" ? 1350 : 1920;
+const $ = (id) => document.getElementById(id);
+
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const mix = (a, b, k) => a + (b - a) * k;
+const E = {
+  lin: (t) => t,
+  outQuad: (t) => 1 - (1 - t) * (1 - t),
+  inQuad: (t) => t * t,
+  outCubic: (t) => 1 - Math.pow(1 - t, 3),
+  inCubic: (t) => t * t * t,
+  inOutCubic: (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2),
+  outQuart: (t) => 1 - Math.pow(1 - t, 4),
+  outExpo: (t) => (t >= 1 ? 1 : 1 - Math.pow(2, -10 * t)),
+  inExpo: (t) => (t <= 0 ? 0 : Math.pow(2, 10 * t - 10)),
+  inOutExpo: (t) => (t <= 0 ? 0 : t >= 1 ? 1 : t < 0.5 ? Math.pow(2, 20 * t - 10) / 2 : (2 - Math.pow(2, -20 * t + 10)) / 2),
+  outBack: (t) => { const s = 1.7; return 1 + (s + 1) * Math.pow(t - 1, 3) + s * Math.pow(t - 1, 2); },
+};
+/** eased progress of t through [a, b] */
+const P = (t, a, b, e = E.lin) => e(clamp((t - a) / (b - a)));
+/** keyframes: [[time, value], [time, value, easeIntoThisKey], ...] */
+function K(t, keys) {
+  if (t <= keys[0][0]) return keys[0][1];
+  for (let i = 1; i < keys.length; i++) {
+    const [t1, v1, e = E.lin] = keys[i];
+    const [t0, v0] = keys[i - 1];
+    if (t <= t1) return mix(v0, v1, e((t - t0) / (t1 - t0)));
+  }
+  return keys[keys.length - 1][1];
+}
+function tr(el, { x = 0, y = 0, s = 1, sx, sy, r = 0, o } = {}) {
+  el.style.transform = `translate(${x}px,${y}px) rotate(${r}deg) scale(${sx ?? s},${sy ?? s})`;
+  if (o !== undefined) el.style.opacity = o;
+}
+const show = (el, on) => { el.style.visibility = on ? "visible" : "hidden"; };
+/** word slide-up reveal: start time, duration */
+function word(el, t, t0, dur = 0.5, out) {
+  const k = P(t, t0, t0 + dur, E.outExpo);
+  let y = mix(140, 0, k);
+  if (out) y = mix(y, -140, P(t, out[0], out[0] + (out[1] || 0.35), E.inCubic));
+  el.style.transform = `translateY(${y}%)`;
+}
+/** right-to-left wipe in the reading direction, via clip-path */
+function wipe(el, t, t0, dur = 0.45, e = E.outExpo) {
+  const k = P(t, t0, t0 + dur, e);
+  el.style.clipPath = `inset(-40% -5% -40% ${(1 - k) * 105}%)`;
+}
+/** cheap deterministic noise */
+const n1 = (x) => { const s = Math.sin(x * 127.1) * 43758.5453; return s - Math.floor(s); };
+
+const G = {}; // geometry measured once fonts are ready
+
+function measure() {
+  const rect = (el) => el.getBoundingClientRect();
+  // S1: rule under "مجاني", courier just below it
+  const word2 = document.createRange(); word2.selectNodeContents($("s1b").firstElementChild);
+  const r2 = word2.getBoundingClientRect();
+  G.s1b = { left: r2.left, right: r2.right, width: r2.width, bottom: rect($("s1b")).bottom };
+  $("r1").style.top = `${G.s1b.bottom + 44}px`;
+  $("g1").style.top = `${G.s1b.bottom + 44 + 310}px`;
+
+  // S2: zoom origin = centre of the largest enclosed counter in the sticker word (the loop of ص)
+  const stk = $("stk");
+  const sr = rect(stk);
+  const cnt = counterOf($("vtext"));
+  const svgR = rect($("vword"));
+  const k = svgR.width / $("vword").viewBox.baseVal.width;
+  G.zero = { x: svgR.left + cnt.cx * k, y: svgR.top + cnt.cy * k, w: cnt.w * k, h: cnt.h * k };
+  G.zero.ox = G.zero.x - sr.left;
+  G.zero.oy = G.zero.y - sr.top;
+  // scale at which the counter (an ellipse) covers the whole frame from the centre
+  const a = G.zero.w / 2, b = G.zero.h / 2;
+  G.zoomMax = 1.25 * Math.hypot(W / 2 / a, H / 2 / b);
+  stk.style.transformOrigin = `${G.zero.ox}px ${G.zero.oy}px`;
+  G.stk = { cx: sr.left + sr.width / 2, cy: sr.top + sr.height / 2, w: sr.width, h: sr.height };
+
+  // burst lines around the sticker
+  const burst = $("burst");
+  burst.style.left = `${G.stk.cx}px`;
+  burst.style.top = `${G.stk.cy}px`;
+  const N = 14;
+  burst.innerHTML = Array.from({ length: N }, () => "<line/>").join("");
+  G.burst = Array.from({ length: N }, (_, i) => (i / N) * Math.PI * 2 + 0.11);
+
+  // S3: route length and page coordinates of the home pin head
+  const route = $("route");
+  G.routeLen = route.getTotalLength();
+  route.style.strokeDasharray = `${G.routeLen} ${G.routeLen}`;
+  const mapR = rect($("map"));
+  const sc = mapR.width / 1080;
+  G.map = { left: mapR.left, top: mapR.top, sc };
+  G.home = { x: mapR.left + 260 * sc, y: mapR.top + (600 - 112) * sc };
+  const chip = $("chip3");
+  chip.style.left = `${mapR.left + (820 - 92) * sc - chip.offsetWidth}px`;
+  chip.style.top = `${mapR.top + (230 - 150) * sc}px`;
+
+  // S5: band slides up from below the frame
+  G.bandTop = $("band").offsetTop;
+}
+
+/** Rasterise an SVG <text> on a canvas and return its largest enclosed hole (a letter's counter), in SVG units. */
+function counterOf(textEl) {
+  const svg = textEl.ownerSVGElement, vb = svg.viewBox.baseVal, cs = getComputedStyle(textEl);
+  const sc = 2, w = Math.ceil(vb.width * sc), h = Math.ceil(vb.height * sc);
+  const c = document.createElement("canvas");
+  c.width = w; c.height = h;
+  const g = c.getContext("2d");
+  g.scale(sc, sc);
+  g.font = `${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
+  g.direction = "rtl";
+  g.textAlign = "center";
+  g.textBaseline = "alphabetic";
+  g.fillText(textEl.textContent, +textEl.getAttribute("x"), +textEl.getAttribute("y"));
+  const px = g.getImageData(0, 0, w, h).data;
+  const ink = new Uint8Array(w * h);
+  for (let i = 0; i < w * h; i++) ink[i] = px[i * 4 + 3] > 110 ? 1 : 0;
+  const lab = new Int32Array(w * h);
+  const st = [];
+  const flood = (seed, id, acc) => {
+    st.push(seed); lab[seed] = id;
+    while (st.length) {
+      const i = st.pop(), x = i % w, y = (i / w) | 0;
+      if (acc) { acc.n++; acc.sx += x; acc.sy += y; acc.x0 = Math.min(acc.x0, x); acc.x1 = Math.max(acc.x1, x); acc.y0 = Math.min(acc.y0, y); acc.y1 = Math.max(acc.y1, y); }
+      const nb = [x > 0 ? i - 1 : -1, x < w - 1 ? i + 1 : -1, y > 0 ? i - w : -1, y < h - 1 ? i + w : -1];
+      for (const j of nb) if (j >= 0 && !ink[j] && lab[j] === 0) { lab[j] = id; st.push(j); }
+    }
+  };
+  for (let x = 0; x < w; x++) { for (const i of [x, (h - 1) * w + x]) if (!ink[i] && !lab[i]) flood(i, -1); }
+  for (let y = 0; y < h; y++) { for (const i of [y * w, y * w + w - 1]) if (!ink[i] && !lab[i]) flood(i, -1); }
+  let best = null, id = 0;
+  for (let i = 0; i < w * h; i++) {
+    if (ink[i] || lab[i]) continue;
+    const acc = { n: 0, sx: 0, sy: 0, x0: 1e9, x1: -1, y0: 1e9, y1: -1 };
+    flood(i, ++id, acc);
+    if (!best || acc.n > best.n) best = acc;
+  }
+  if (!best) throw new Error("no counter found in " + textEl.textContent);
+  return { cx: best.sx / best.n / sc, cy: best.sy / best.n / sc, w: (best.x1 - best.x0 + 1) / sc, h: (best.y1 - best.y0 + 1) / sc, n: best.n };
+}
+
+function render(t) {
+  // ---------------- camera shake on the sticker slam ----------------
+  const u = t - 3.0;
+  const amp = u >= 0 && u < 0.45 ? 18 * Math.exp(-u * 11) : 0;
+  tr($("cam"), { x: amp * Math.sin(u * 2 * Math.PI * 16), y: amp * Math.cos(u * 2 * Math.PI * 12 + 1), s: 1 + amp * 0.0034 });
+
+  // ================= S1 · 0 → 2.25 =================
+  const s1 = $("s1");
+  show(s1, t < 2.25);
+  if (t < 2.25) {
+    // courier sweeps right → left and reveals "مجاني" behind it
+    const x = K(t, [[0, 640], [1.6, -1700, E.lin]]);
+    const bob = Math.sin(t * 2 * Math.PI * 7) * 3;
+    tr($("r1"), { x, y: bob, r: -1.2 });
+    const lines = $("sp1").children;
+    for (let i = 0; i < lines.length; i++) {
+      const j = n1(i * 3.1 + Math.floor(t * 30) * 0.37);
+      lines[i].style.opacity = 0.65 + j * 0.35;
+      lines[i].setAttribute("x2", 470 + 140 + 260 * (0.6 + 0.4 * n1(i + 0.5)) * (0.85 + 0.3 * j));
+    }
+    const edge = x + 380;
+    const left = clamp(edge - G.s1b.left, 0, G.s1b.width + 40);
+    $("s1b").style.clipPath = `polygon(${left}px -60%, 120% -60%, 120% 160%, ${left}px 160%)`;
+    // stamp arrow nudges on the beat
+    nudge($("arr1"), t, [1.0, 1.5]);
+    // push left while the next scene wipes in
+    const push = P(t, 1.75, 2.25, E.inOutCubic);
+    tr($("s1a"), { x: -90 * push });
+    tr($("s1b"), { x: -90 * push });
+    tr($("b1"), { x: -90 * push });
+  }
+
+  // ================= S2 · 1.75 → 5.0 =================
+  const s2 = $("s2");
+  const s2on = t >= 1.75 && t < 5.0;
+  show(s2, s2on);
+  if (s2on) {
+    // wipe in from the right with a cream leading stripe
+    const L = K(t, [[1.75, 1124], [2.25, -44, E.inOutCubic]]);
+    s2.style.clipPath = `inset(0 0 0 ${Math.max(0, L)}px)`;
+    $("s1stripe").style.left = `${L}px`;
+    $("s1stripe").style.display = t < 2.25 ? "block" : "none";
+
+    const ws = $("s2a").querySelectorAll("i");
+    word(ws[0], t, 2.0);
+    word(ws[1], t, 2.25);
+    // headline leaves as the camera dives into the zero
+    tr($("s2a"), { y: -70 * P(t, 4.3, 4.6, E.inCubic), o: 1 - P(t, 4.3, 4.6) });
+
+    // sticker slam: falls in big, hits at 3.06, settles
+    const stk = $("stk");
+    let s = K(t, [[2.8, 2.7], [3.0, 1.0, E.inQuad], [3.1, 0.96, E.outQuad], [3.28, 1.0, E.inOutCubic]]);
+    let r = K(t, [[2.8, -20], [3.0, -4, E.outCubic]]);
+    r += 0.35 * Math.sin((t - 3.3) * 2.2) * P(t, 3.3, 3.8);
+    let dx = 0, dy = 0;
+    // zoom through the zero into the next scene
+    const z = P(t, 4.35, 5.0, E.inExpo);
+    const zc = P(t, 4.35, 4.95, E.inOutCubic);
+    s = s * mix(1, G.zoomMax, z);
+    r = mix(r, 0, P(t, 4.35, 4.8, E.outCubic));
+    dx = mix(0, W / 2 - G.zero.x, zc);
+    dy = mix(0, H / 2 - G.zero.y, zc);
+    tr(stk, { x: dx, y: dy, s, r, o: t >= 2.8 ? 1 : 0 });
+
+    // burst at impact
+    const bk = P(t, 3.0, 3.44);
+    const lines = $("burst").children;
+    for (let i = 0; i < lines.length; i++) {
+      const a = G.burst[i];
+      const r1 = mix(1.02, 1.32, E.outCubic(bk)), r2 = mix(1.08, 1.42, E.outExpo(Math.min(1, bk * 1.6)));
+      const rx = G.stk.w / 2 + 40, ry = G.stk.h / 2 + 40;
+      const on = t >= 3.0 && bk < 1;
+      lines[i].setAttribute("x1", Math.cos(a) * rx * r1);
+      lines[i].setAttribute("y1", Math.sin(a) * ry * r1);
+      lines[i].setAttribute("x2", Math.cos(a) * rx * r2);
+      lines[i].setAttribute("y2", Math.sin(a) * ry * r2);
+      lines[i].style.opacity = on ? 1 : 0;
+    }
+  }
+
+  // ================= S3 · 5.0 → 8.6 =================
+  const s3 = $("s3");
+  const s3on = t >= 5.0 && t < 8.6;
+  show(s3, s3on);
+  if (s3on) {
+    // the zoom keeps decelerating into the map
+    const zs = K(t, [[5.0, 1.35], [5.9, 1.0, E.outCubic]]);
+    tr($("map"), { s: zs });
+    $("mapBase").style.opacity = P(t, 5.0, 5.45, E.outCubic);
+    $("mapFx").style.opacity = P(t, 5.25, 5.7, E.outCubic);
+    const ws = $("s3a").querySelectorAll("i");
+    word(ws[0], t, 5.125);
+    word(ws[1], t, 5.25);
+
+    const hb = K(t, [[7.25, 1], [7.37, 1.16, E.outQuad], [7.62, 1, E.outBack]]);
+    pin($("pinShopBody"), $("shShadow"), t, 5.5);
+    pin($("pinHomeBody"), $("hmShadow"), t, 5.75, hb);
+    const c3 = $("chip3");
+    const ck = P(t, 5.625, 5.95, E.outBack);
+    c3.style.transformOrigin = "100% 100%";
+    tr(c3, { s: mix(0.6, 1, ck), o: P(t, 5.625, 5.72) });
+
+    // route draws while the courier dot travels it
+    const rk = P(t, 6.0, 7.25, E.inOutCubic);
+    const route = $("route");
+    route.style.strokeDashoffset = `${G.routeLen * (1 - rk)}`;
+    const pt = route.getPointAtLength(G.routeLen * rk);
+    const dotIn = P(t, 5.875, 6.06, E.outBack), dotOut = P(t, 7.2, 7.37, E.inCubic);
+    $("dot").setAttribute("transform", `translate(${pt.x} ${pt.y - 4}) scale(${Math.max(0.001, dotIn * (1 - dotOut))})`);
+    // arrival: home pin pops, ripples, check badge
+    ripple($("rip1"), t, 7.25);
+    ripple($("rip2"), t, 7.43);
+    const ch = P(t, 7.375, 7.65, E.outBack);
+    $("check").setAttribute("transform", `translate(52 -170) scale(${Math.max(0.001, ch)})`);
+    // house glyph tucks away just before the pin head becomes the next scene
+    const hs = 1 - P(t, 7.88, 8.02, E.inCubic);
+    $("house").setAttribute("transform", `translate(0 -112) scale(${3.6 * Math.max(0.001, hs)}) translate(-140 -103)`);
+  }
+
+  // ================= S4 · 8.0 → 11.6 =================
+  const s4 = $("s4");
+  const s4on = t >= 8.0;
+  show(s4, s4on && t < 15.01);
+  if (s4on) {
+    // grows out of the home pin head
+    const R = K(t, [[8.0, 66 * G.map.sc], [8.6, 2400, E.inOutCubic]]);
+    s4.style.clipPath = t < 8.6 ? `circle(${R}px at ${G.home.x}px ${G.home.y}px)` : "none";
+    // skyline scrolls right as the courier rides left
+    const tile = parseFloat(getComputedStyle($("sky4").firstElementChild).width);
+    const sx = ((t - 8) * 240) % tile;
+    tr($("sky4"), { x: sx - tile });
+    $("road").style.backgroundPosition = `${((t - 8) * 1100) % 160}px 0`;
+    // courier rides in place, then bolts out to the left
+    const out = K(t, [[10.82, 0], [11.16, -1300, E.inCubic]]);
+    const bob = Math.sin(t * 2 * Math.PI * 6.5) * 4;
+    tr($("r4"), { x: out, y: bob });
+    tr($("r4bike"), { r: Math.sin(t * 2 * Math.PI * 3.2) * 0.8 });
+    const lines = $("sp4").children;
+    const boost = 1 + 1.6 * P(t, 10.82, 11.1);
+    for (let i = 0; i < lines.length; i++) {
+      const j = n1(i * 5.3 + Math.floor(t * 15) * 0.71);
+      lines[i].style.opacity = 0.55 + 0.45 * j;
+      lines[i].setAttribute("x2", 540 + (120 + 220 * n1(i + 2.5) * (0.8 + 0.4 * j)) * boost);
+    }
+    const ws = $("s4a").querySelectorAll("i");
+    word(ws[0], t, 8.5, 0.5, [10.875, 0.32]);
+    word(ws[1], t, 8.625, 0.5, [10.92, 0.32]);
+    const ck = P(t, 9.0, 9.35, E.outBack);
+    tr($("chip4"), { s: mix(0.5, 1, ck), o: P(t, 9.0, 9.1) });
+    const cOut = P(t, 10.98, 11.22, E.inCubic);
+    $("chip4").style.clipPath = `inset(-10% -10% -10% ${cOut * 112}%)`;
+  }
+
+  // ================= S5 · 11.0 → 15 =================
+  const s5 = $("s5");
+  const s5on = t >= 11.0;
+  show(s5, s5on);
+  if (s5on) {
+    const by = K(t, [[11.08, H - G.bandTop + 40], [11.52, 0, E.outExpo]]);
+    tr($("band"), { y: by });
+    tr($("sky5"), { y: mix(140, 0, P(t, 11.5, 12.1, E.outCubic)) });
+    // wordmark, tagline
+    const st = P(t, 11.5, 11.88, E.outBack);
+    tr($("stamp5"), { s: Math.max(0.001, st), r: mix(-30, 0, st) });
+    wipe($("name5"), t, 11.56);
+    wipe($("t5"), t, 11.66);
+    const ws = $("s5a").querySelectorAll("i");
+    [11.625, 11.75, 11.875, 12.0].forEach((t0, i) => word(ws[i], t, t0));
+    // CTA bar wipes in, then text, arrow, phone
+    wipe($("cta"), t, 12.0, 0.42);
+    word($("ctaT"), t, 12.125);
+    const ap = P(t, 12.25, 12.6, E.outBack);
+    const beat = (t - 12.5) * (BPM / 60);
+    const nud = t > 12.5 ? Math.pow(Math.max(0, Math.sin(Math.PI * (beat % 1) * 2)), 2) * (beat % 1 < 0.5 ? 1 : 0) : 0;
+    tr($("ctaArr"), { x: mix(40, 0, ap) - 14 * nud, o: P(t, 12.25, 12.37) });
+    tr($("phone"), { y: mix(150, 0, P(t, 12.25, 12.75, E.outExpo)) });
+    // light sweep across the CTA
+    const sw = (t0) => P(t, t0, t0 + 0.55, E.inOutCubic);
+    const swk = t < 13.9 ? sw(13.2) : sw(14.2);
+    $("shine").style.left = `${mix(-200, 1000, swk)}px`;
+    $("shine").style.display = (t > 13.2 && t < 13.75) || (t > 14.2 && t < 14.75) ? "block" : "none";
+    nudge($("arr5"), t, [13.0, 14.0]);
+  }
+}
+
+/** pin drop with a small squash */
+function pin(body, shadow, t, t0, extra = 1) {
+  const k = P(t, t0, t0 + 0.42, E.outBack);
+  const y = mix(-90, 0, P(t, t0, t0 + 0.3, E.outQuad));
+  const o = P(t, t0, t0 + 0.08);
+  body.setAttribute("transform", `translate(0 ${y}) scale(${Math.max(0.001, k * extra)})`);
+  body.style.opacity = o;
+  shadow.setAttribute("transform", `scale(${Math.max(0.001, mix(0.4, 1, P(t, t0, t0 + 0.3)))})`);
+  shadow.style.opacity = o;
+}
+function ripple(c, t, t0) {
+  const k = P(t, t0, t0 + 0.7, E.outCubic);
+  c.setAttribute("r", mix(60, 230, k));
+  c.style.opacity = t < t0 ? 0 : 1 - k;
+}
+/** small forward nudge of a stamp arrow on given beats */
+function nudge(g, t, times) {
+  let x = 0;
+  for (const t0 of times) x += -7 * Math.sin(Math.PI * P(t, t0, t0 + 0.32));
+  g.setAttribute("transform", `translate(${x} 0)`);
+}
+
+/* ---- audio cue sheet (used by the renderer to build the soundtrack) ---- */
+window.CUES = [
+  // whooshes pan right → left with the motion (pan: start → end, -1 left … +1 right)
+  { t: 0.0, type: "whoosh", len: 0.9, gain: 1.25, pan: [0.8, -0.8] },
+  { t: 1.62, type: "whoosh", len: 0.62, gain: 0.7, pan: [0.7, -0.7] },
+  { t: 2.0, type: "pop", gain: 0.5 }, { t: 2.25, type: "pop", gain: 0.5 },
+  { t: 2.8, type: "riser", len: 0.2, gain: 0.45 },
+  { t: 3.0, type: "impact", gain: 1.0 },
+  { t: 4.35, type: "riser", len: 0.65, gain: 0.85 },
+  { t: 5.0, type: "impact", gain: 0.4 },
+  { t: 5.125, type: "pop", gain: 0.45 }, { t: 5.25, type: "pop", gain: 0.45 },
+  { t: 5.5, type: "drop", gain: 0.7 }, { t: 5.625, type: "tick", gain: 0.4 }, { t: 5.75, type: "drop", gain: 0.7 },
+  { t: 6.0, type: "zip", len: 1.25, gain: 0.5 },
+  { t: 7.25, type: "ding", gain: 0.85 },
+  { t: 7.85, type: "whoosh", len: 0.75, gain: 0.75, pan: [-0.6, 0.4] },
+  { t: 8.0, type: "motor", len: 3.2, gain: 0.5 },
+  { t: 8.5, type: "pop", gain: 0.45 }, { t: 8.625, type: "pop", gain: 0.45 },
+  { t: 9.0, type: "drop", gain: 0.6 },
+  { t: 10.78, type: "whoosh", len: 0.5, gain: 0.9, pan: [0.0, -0.9] },
+  { t: 11.08, type: "whoosh", len: 0.44, gain: 0.55, pan: [0.2, -0.2] },
+  { t: 11.5, type: "impact", gain: 0.9 },
+  { t: 11.625, type: "pop", gain: 0.35 }, { t: 11.75, type: "pop", gain: 0.35 }, { t: 11.875, type: "pop", gain: 0.35 }, { t: 12.0, type: "pop", gain: 0.35 },
+  { t: 12.25, type: "tick", gain: 0.55 },
+];
+window.MOTION = { duration: DURATION, fps: FPS, bpm: BPM, width: W, height: H, format: FMT };
+
+window.seek = (t) => render(t);
+window.motionReady = document.fonts.ready.then(() => {
+  measure();
+  const q = new URLSearchParams(location.search).get("t");
+  render(q !== null ? parseFloat(q) : 0);
+  return true;
+});
+</script>
+</body>
+</html>

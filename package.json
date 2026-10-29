@@ -9,7 +9,8 @@
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "ads:render": "node scripts/render-ads.cjs"
+    "ads:render": "node scripts/render-ads.cjs",
+    "motion:render": "node scripts/render-motion.cjs design/motion/offer.html"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.128.0",
