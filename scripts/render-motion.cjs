@@ -172,7 +172,7 @@ function encode(ff, dir, motion, opts, outFile, audioFile) {
   const name = path.basename(file, path.extname(file));
   const sizes = sizesFromHtml(file);
   const formats = opts.format === "all" ? Object.keys(sizes) : opts.format.split(",");
-  const outDir = path.resolve(opts.out || path.join(path.dirname(file), opts.stills ? "preview" : "out"));
+  const outDir = path.resolve(opts.out || path.join(path.dirname(file), opts.stills ? "preview" : "video"));
   fs.mkdirSync(outDir, { recursive: true });
 
   if (opts.stills) {
